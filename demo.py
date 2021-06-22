@@ -1,9 +1,5 @@
-
-# import sys
-# import time
-# from PIL import Image, ImageDraw
-# from models.tiny_yolo import TinyYoloNet
 from csv import writer
+import re
 import pandas as pd
 from tool.utils import *
 from tool.torch_utils import *
@@ -14,6 +10,10 @@ from stage2.segment import *
 from PIL import Image
 import pytesseract
 import os
+from flask import Flask
+import sqlite3
+import csv
+app = Flask(__name__)
 
 """hyper parameters"""
 if torch.cuda.is_available():
@@ -188,12 +188,27 @@ def get_args():
 
 
 if __name__ == '__main__':
+    if os.path.exists("data.csv"):
+        os.remove("data.csv")
     args = get_args()
     dir_path = os.path.dirname(os.path.realpath(__file__))
     file_list = os.listdir(dir_path+"\images")
     for img in file_list:
         detect_cv2(args.cfgfile, args.weightfile,
                    "C:/Users/Asus/Desktop/project_ma/Automatic-Number-Plate-Recognition/images/" + img)
+    cv2.destroyAllWindows()
+    conn = sqlite3.connect('database.db')
+    print("Opened database successfully")
+    with open('data.csv') as csv_file:
+        csv_reader = csv.reader(csv_file, delimiter=',')
+        next(csv_reader)
+        line_count = 0
+        for row in csv_reader:
+            t = "".join(re.findall('[0-9A-Za-z]+', row[2]))
+            conn.execute("INSERT INTO plate_numbers VALUES(?)", (t,))
+        conn.commit()
+        conn.close()
+    app.run()
     # print(file_list)
     # if args.imgfile:
     #     detect_cv2(args.cfgfile, args.weightfile, args.imgfile)
