@@ -13,3 +13,5 @@ log
 
 *.jpg
 data/outcome
+
+data.csv
