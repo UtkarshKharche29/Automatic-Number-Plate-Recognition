@@ -28,7 +28,6 @@ def detect_cv2(cfgfile, weightfile, imgfile):
 
     m.print_network()
     m.load_weights(weightfile)
-    print('Loading weights from %s... Done!' % (weightfile))
 
     if use_cuda:
         m.cuda()
@@ -86,7 +85,6 @@ def detect_cv2(cfgfile, weightfile, imgfile):
                 time.localtime(time.time())), text]
             df.to_csv('data.csv', mode='w', index=False)
         os.remove('.\preds\gray.png')
-        print(text)
         cv2.imshow("Image", img)
         cv2.imshow("Output", gray)
         cv2.waitKey(1)
@@ -99,7 +97,6 @@ def detect_cv2_camera(cfgfile, weightfile):
 
     m.print_network()
     m.load_weights(weightfile)
-    print('Loading weights from %s... Done!' % (weightfile))
 
     if use_cuda:
         m.cuda()
@@ -108,8 +105,6 @@ def detect_cv2_camera(cfgfile, weightfile):
     cap = cv2.VideoCapture("./output.mp4")
     cap.set(3, 1280)
     cap.set(4, 720)
-    print("Starting the YOLO loop...")
-
     num_classes = m.num_classes
     if num_classes == 20:
         namesfile = 'data/voc.names'
@@ -127,7 +122,6 @@ def detect_cv2_camera(cfgfile, weightfile):
         #start = time.time()
         boxes = do_detect(m, sized, 0.4, 0.6, use_cuda)
         #finish = time.time()
-        #print('Predicted in %f seconds.' % (finish - start))
 
         result_img = plot_boxes_cv2(
             img, boxes[0], savename=None, class_names=class_names)
@@ -148,7 +142,6 @@ def detect_skimage(cfgfile, weightfile, imgfile):
 
     m.print_network()
     m.load_weights(weightfile)
-    print('Loading weights from %s... Done!' % (weightfile))
 
     if use_cuda:
         m.cuda()
