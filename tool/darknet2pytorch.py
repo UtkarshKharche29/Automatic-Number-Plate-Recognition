@@ -6,6 +6,7 @@ from tool.yolo_layer import YoloLayer
 from tool.config import *
 from tool.torch_utils import *
 
+
 class Mish(torch.nn.Module):
     def __init__(self):
         super().__init__()
@@ -62,7 +63,8 @@ class Upsample_expand(nn.Module):
         W = x.data.size(3)
         ws = stride
         hs = stride
-        x = x.view(B, C, H, 1, W, 1).expand(B, C, H, stride, W, stride).contiguous().view(B, C, H * stride, W * stride)
+        x = x.view(B, C, H, 1, W, 1).expand(B, C, H, stride, W,
+                                            stride).contiguous().view(B, C, H * stride, W * stride)
         return x
 
 
@@ -100,9 +102,12 @@ class Reorg(nn.Module):
         assert (W % stride == 0)
         ws = stride
         hs = stride
-        x = x.view(B, C, int(H / hs), hs, int(W / ws), ws).transpose(3, 4).contiguous()
-        x = x.view(B, C, int(H / hs * W / ws),hs * ws).transpose(2, 3).contiguous()
-        x = x.view(B, C, int(hs * ws),int(H / hs), int(W / ws)).transpose(1, 2).contiguous()
+        x = x.view(B, C, int(H / hs), hs, int(W / ws),
+                   ws).transpose(3, 4).contiguous()
+        x = x.view(B, C, int(H / hs * W / ws), hs *
+                   ws).transpose(2, 3).contiguous()
+        x = x.view(B, C, int(hs * ws), int(H / hs),
+                   int(W / ws)).transpose(1, 2).contiguous()
         x = x.view(B, int(hs * ws * C), int(H / hs), int(W / ws))
         return x
 
@@ -168,7 +173,8 @@ class Darknet(nn.Module):
                 outputs[ind] = x
             elif block['type'] == 'route':
                 layers = block['layers'].split(',')
-                layers = [int(i) if int(i) > 0 else int(i) + ind for i in layers]
+                layers = [int(i) if int(i) > 0 else int(
+                    i) + ind for i in layers]
                 if len(layers) == 1:
                     x = outputs[layers[0]]
                     outputs[ind] = x
@@ -250,19 +256,23 @@ class Darknet(nn.Module):
                 if batch_normalize:
                     model.add_module('conv{0}'.format(conv_id),
                                      nn.Conv2d(prev_filters, filters, kernel_size, stride, pad, bias=False))
-                    model.add_module('bn{0}'.format(conv_id), nn.BatchNorm2d(filters))
+                    model.add_module('bn{0}'.format(
+                        conv_id), nn.BatchNorm2d(filters))
                     # model.add_module('bn{0}'.format(conv_id), BN2d(filters))
                 else:
                     model.add_module('conv{0}'.format(conv_id),
                                      nn.Conv2d(prev_filters, filters, kernel_size, stride, pad))
                 if activation == 'leaky':
-                    model.add_module('leaky{0}'.format(conv_id), nn.LeakyReLU(0.1, inplace=True))
+                    model.add_module('leaky{0}'.format(
+                        conv_id), nn.LeakyReLU(0.1, inplace=True))
                 elif activation == 'relu':
-                    model.add_module('relu{0}'.format(conv_id), nn.ReLU(inplace=True))
+                    model.add_module('relu{0}'.format(
+                        conv_id), nn.ReLU(inplace=True))
                 elif activation == 'mish':
                     model.add_module('mish{0}'.format(conv_id), Mish())
                 else:
-                    print("convalution havn't activate {}".format(activation))
+                    # print("convalution havn't activate {}".format(activation))
+                    pass
 
                 prev_filters = filters
                 out_filters.append(prev_filters)
@@ -275,11 +285,13 @@ class Darknet(nn.Module):
                 if stride == 1 and pool_size % 2:
                     # You can use Maxpooldark instead, here is convenient to convert onnx.
                     # Example: [maxpool] size=3 stride=1
-                    model = nn.MaxPool2d(kernel_size=pool_size, stride=stride, padding=pool_size // 2)
+                    model = nn.MaxPool2d(
+                        kernel_size=pool_size, stride=stride, padding=pool_size // 2)
                 elif stride == pool_size:
                     # You can use Maxpooldark instead, here is convenient to convert onnx.
                     # Example: [maxpool] size=2 stride=2
-                    model = nn.MaxPool2d(kernel_size=pool_size, stride=stride, padding=0)
+                    model = nn.MaxPool2d(
+                        kernel_size=pool_size, stride=stride, padding=0)
                 else:
                     model = MaxPoolDark(pool_size, stride)
                 out_filters.append(prev_filters)
@@ -324,18 +336,20 @@ class Darknet(nn.Module):
             elif block['type'] == 'route':
                 layers = block['layers'].split(',')
                 ind = len(models)
-                layers = [int(i) if int(i) > 0 else int(i) + ind for i in layers]
+                layers = [int(i) if int(i) > 0 else int(
+                    i) + ind for i in layers]
                 if len(layers) == 1:
                     prev_filters = out_filters[layers[0]]
                     prev_stride = out_strides[layers[0]]
                 elif len(layers) == 2:
                     assert (layers[0] == ind - 1)
-                    prev_filters = out_filters[layers[0]] + out_filters[layers[1]]
+                    prev_filters = out_filters[layers[0]
+                                               ] + out_filters[layers[1]]
                     prev_stride = out_strides[layers[0]]
                 elif len(layers) == 4:
                     assert (layers[0] == ind - 1)
                     prev_filters = out_filters[layers[0]] + out_filters[layers[1]] + out_filters[layers[2]] + \
-                                   out_filters[layers[3]]
+                        out_filters[layers[3]]
                     prev_stride = out_strides[layers[0]]
                 else:
                     print("route error!!!")
@@ -389,7 +403,8 @@ class Darknet(nn.Module):
                 yolo_layer.num_classes = int(block['classes'])
                 self.num_classes = yolo_layer.num_classes
                 yolo_layer.num_anchors = int(block['num'])
-                yolo_layer.anchor_step = len(yolo_layer.anchors) // yolo_layer.num_anchors
+                yolo_layer.anchor_step = len(
+                    yolo_layer.anchors) // yolo_layer.num_anchors
                 yolo_layer.stride = prev_stride
                 # yolo_layer.object_scale = float(block['object_scale'])
                 # yolo_layer.noobject_scale = float(block['noobject_scale'])

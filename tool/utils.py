@@ -119,10 +119,10 @@ def nms_cpu(boxes, confs, nms_thresh=0.5, min_mode=False):
     return np.array(keep)
 
 
-
-def plot_boxes_cv2(img, boxes, savename=None, class_names=None, color=(0,255,0)):
+def plot_boxes_cv2(img, boxes, savename=None, class_names=None, color=(0, 255, 0)):
     import cv2
-    colors = np.array([[1, 0, 1], [0, 0, 1], [0, 1, 1], [0, 1, 0], [1, 1, 0], [1, 0, 0]], dtype=np.float32)
+    colors = np.array([[1, 0, 1], [0, 0, 1], [0, 1, 1], [0, 1, 0], [
+                      1, 1, 0], [1, 0, 0]], dtype=np.float32)
 
     def get_color(c, x, max_val):
         ratio = float(x) / max_val * 5
@@ -156,17 +156,19 @@ def plot_boxes_cv2(img, boxes, savename=None, class_names=None, color=(0,255,0))
             #blue = get_color(0, offset, classes)
             if color is None:
                 rgb = (red, green, blue)
-            img = cv2.putText(img, class_names[cls_id], (x1, y1), cv2.FONT_HERSHEY_SIMPLEX, 1.2, rgb, 1)
+            img = cv2.putText(
+                img, class_names[cls_id], (x1, y1), cv2.FONT_HERSHEY_SIMPLEX, 1.2, rgb, 1)
         img = cv2.rectangle(img, (x1, y1), (x2, y2), rgb, 1)
         #print("shape :",img.shape,'upper point:',x1,',',y1,'lower point :',x2,',',y2)
         if savename:
             #print("save plot results to %s" % savename)
-            if not (x1==0 or x2==0 or y1==0 or y2==0 or x1==x2 or y1==y2):
-                crop = crop[y1:y2 , x1:x2]
+            if not (x1 == 0 or x2 == 0 or y1 == 0 or y2 == 0 or x1 == x2 or y1 == y2):
+                crop = crop[y1:y2, x1:x2]
             #    if crop.shape < (800, 150, 3):
-                crop = cv2.resize(crop, (800, 200), interpolation=cv2.INTER_NEAREST)
+                crop = cv2.resize(crop, (800, 200),
+                                  interpolation=cv2.INTER_NEAREST)
                 cv2.imwrite(savename, crop)
-                cv2.imshow('cropped',crop)
+                cv2.imshow('cropped', crop)
     return img
 
 
@@ -175,7 +177,8 @@ def read_truths(lab_path):
         return np.array([])
     if os.path.getsize(lab_path):
         truths = np.loadtxt(lab_path)
-        truths = truths.reshape(truths.size / 5, 5)  # to avoid single truth problem
+        # to avoid single truth problem
+        truths = truths.reshape(truths.size / 5, 5)
         return truths
     else:
         return np.array([])
@@ -189,7 +192,6 @@ def load_class_names(namesfile):
         line = line.rstrip()
         class_names.append(line)
     return class_names
-
 
 
 def post_processing(img, conf_thresh, nms_thresh, output):
@@ -234,16 +236,17 @@ def post_processing(img, conf_thresh, nms_thresh, output):
             l_max_id = l_max_id[keep]
 
             for j in range(l_box_array.shape[0]):
-                bboxes.append([l_box_array[j, 0], l_box_array[j, 1], l_box_array[j, 2], l_box_array[j, 3], l_max_conf[j], l_max_conf[j], l_max_id[j]])
+                bboxes.append([l_box_array[j, 0], l_box_array[j, 1], l_box_array[j, 2],
+                              l_box_array[j, 3], l_max_conf[j], l_max_conf[j], l_max_id[j]])
 
         bboxes_batch.append(bboxes)
 
     t3 = time.time()
 
-    print('-----------------------------------')
-    print('       max and argmax : %f' % (t2 - t1))
-    print('                  nms : %f' % (t3 - t2))
-    print('Post processing total : %f' % (t3 - t1))
-    print('-----------------------------------')
+    # print('-----------------------------------')
+    # print('       max and argmax : %f' % (t2 - t1))
+    # print('                  nms : %f' % (t3 - t2))
+    # print('Post processing total : %f' % (t3 - t1))
+    # print('-----------------------------------')
 
     return bboxes_batch

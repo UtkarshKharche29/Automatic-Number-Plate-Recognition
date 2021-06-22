@@ -13,7 +13,7 @@ import numpy as np
 from stage2.segment import *
 from PIL import Image
 import pytesseract
-
+import os
 
 """hyper parameters"""
 if torch.cuda.is_available():
@@ -26,7 +26,7 @@ def detect_cv2(cfgfile, weightfile, imgfile):
     import cv2
     m = Darknet(cfgfile)
 
-    m.print_network()
+    # m.print_network()
     m.load_weights(weightfile)
 
     if use_cuda:
@@ -59,9 +59,9 @@ def detect_cv2(cfgfile, weightfile, imgfile):
     result = plot_boxes_cv2(
         img, boxes[0], savename='preds\predictions.jpg', class_names=class_names)
     result = cv2.resize(result, (int(600), int(600)))
-    cv2.imshow("Bounding Box", result)
-    cv2.imwrite(".\preds\bbox.jpg", result)
-    cv2.waitKey(1)
+    # cv2.imshow("Bounding Box", result)
+    # cv2.imwrite(".\preds\bbox.jpg", result)
+    # cv2.waitKey(1)
     if os.path.exists('.\preds\predictions.jpg'):
         # segmentation('.\preds\predictions.jpg')image = cv2.imread(args["image"])
         img = cv2.imread('.\preds\predictions.jpg')
@@ -85,9 +85,9 @@ def detect_cv2(cfgfile, weightfile, imgfile):
                 time.localtime(time.time())), text]
             df.to_csv('data.csv', mode='w', index=False)
         os.remove('.\preds\gray.png')
-        cv2.imshow("Image", img)
-        cv2.imshow("Output", gray)
-        cv2.waitKey(1)
+        # cv2.imshow("Image", img)
+        # cv2.imshow("Output", gray)
+        # cv2.waitKey(1)
 
 
 def detect_cv2_camera(cfgfile, weightfile):
@@ -95,7 +95,7 @@ def detect_cv2_camera(cfgfile, weightfile):
     import cv2
     m = Darknet(cfgfile)
 
-    m.print_network()
+    # m.print_network()
     m.load_weights(weightfile)
 
     if use_cuda:
@@ -126,11 +126,11 @@ def detect_cv2_camera(cfgfile, weightfile):
         result_img = plot_boxes_cv2(
             img, boxes[0], savename=None, class_names=class_names)
 
-        cv2.imshow('Yolo demo', result_img)
+        # cv2.imshow('Yolo demo', result_img)
         if np.any(img != result_img):
             cv2.imwrite("./frames/frame{}.png".format(frame_count), result_img)
             frame_count += 1
-        cv2.waitKey(1)
+        # cv2.waitKey(1)
 
     cap.release()
 
@@ -140,7 +140,7 @@ def detect_skimage(cfgfile, weightfile, imgfile):
     from skimage.transform import resize
     m = Darknet(cfgfile)
 
-    m.print_network()
+    # m.print_network()
     m.load_weights(weightfile)
 
     if use_cuda:
@@ -177,9 +177,9 @@ def get_args():
     parser.add_argument('-weightfile', type=str,
                         default='./weight_folder/lapi.weights',
                         help='path of trained model.', dest='weightfile')
-    parser.add_argument('-imgfile', type=str,
-                        default=None,
-                        help='path of your image file.', dest='imgfile')
+    # parser.add_argument('-imgfile', type=str,
+    #                     default=None,
+    #                     help='path of your image file.', dest='imgfile')
     parser.add_argument("-p", "--preprocess", dest='p', type=str, default="thresh",
                         help="type of preprocessing to be done")
     args = parser.parse_args()
@@ -189,10 +189,13 @@ def get_args():
 
 if __name__ == '__main__':
     args = get_args()
-    if args.imgfile:
-        detect_cv2(args.cfgfile, args.weightfile, args.imgfile)
-        # detect_imges(args.cfgfile, args.weightfile)
-        # detect_cv2(args.cfgfile, args.weightfile, args.imgfile)
-        # detect_skimage(args.cfgfile, args.weightfile, args.imgfile)
-    else:
-        detect_cv2_camera(args.cfgfile, args.weightfile)
+    dir_path = os.path.dirname(os.path.realpath(__file__))
+    file_list = os.listdir(dir_path+"\images")
+    for img in file_list:
+        detect_cv2(args.cfgfile, args.weightfile,
+                   "C:/Users/Asus/Desktop/project_ma/Automatic-Number-Plate-Recognition/images/" + img)
+    # print(file_list)
+    # if args.imgfile:
+    #     detect_cv2(args.cfgfile, args.weightfile, args.imgfile)
+    # else:
+    #     detect_cv2_camera(args.cfgfile, args.weightfile)
