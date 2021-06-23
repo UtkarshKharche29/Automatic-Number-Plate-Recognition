@@ -12,6 +12,8 @@
       integrity="sha384-+0n0xVW2eSR5OomGNYDnhzAbDsOXxcvSN1TPprVMTNDbiYZCxYbOOl7+AMvyTG2x"
       crossorigin="anonymous"
     />
+    <!-- Font Awesome CDN -->
+    <script src="https://kit.fontawesome.com/51ae0f9846.js" crossorigin="anonymous"></script>
     <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='style.css') }}" />
   </head>
   <body>
@@ -33,12 +35,12 @@
             <!-- <a class="navbar-brand" href="#">XYZ</a> -->
             <ul class="navbar-nav me-auto mb-2 mb-lg-0">
               <li class="nav-item">
-                <a class="nav-link active" aria-current="page" href={{url_for('index')}}
+                <a class="nav-link" aria-current="page" href={{url_for('index')}}
                   >Home</a
                 >
               </li>
               <li class="nav-item">
-                <a class="nav-link" href={{url_for('pass_application')}}
+                <a class="nav-link active" href={{url_for('pass_application')}}
                   >Pass Applications</a
                 >
               </li>
@@ -55,7 +57,7 @@
       {% for row in rows %}
       <div class="card application container-fluid"></div>
       <div class="row">
-        <div class="col-1 btns d-flex flex-wrap">
+        <!-- <div class="col-1 btns d-flex flex-wrap">
           <div class="accept card-body">
             <form action="{{url_for('accept',number=row[3])}}">
             <button  class="btn btn-success">Accept</button>
@@ -66,8 +68,8 @@
             <button class="btn btn-danger">Reject</button>
           </form>
           </div>
-        </div>
-        <div class="col-10">
+        </div> -->
+        <div class="col-8">
           <div class="card-body">
             <h6 class="name card-title">{{row[0]}} {{row[1]}}</h6>
             <p class="email card-text">{{row[2]}}</p>
@@ -76,6 +78,21 @@
             <p class="card-text">
               <span>{{row[6]}}</span><span>{{row[7]}}</span><span>{{row[8]}}</span>
             </p>
+          </div>
+        </div>
+        <div class="col-2 btns">
+          <div class="accept">
+            <form action="{{url_for('accept',number=row[3])}}">
+              <button class="btn btn-success"><i class="fas fa-check-circle"></i> Accept</button>
+            </form>
+          </div>
+        </div>
+
+        <div class="col-2 btns">
+          <div class="reject">
+            <form action="{{url_for('reject',number=row[3])}}">
+              <button class="btn btn-danger"><i class="fas fa-times-circle"></i> Reject</button>
+            </form>
           </div>
         </div>
       </div>
