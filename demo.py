@@ -10,7 +10,7 @@ from stage2.segment import *
 from PIL import Image
 import pytesseract
 import os
-from flask import Flask
+from flask import Flask, render_template, request, redirect
 import sqlite3
 import csv
 app = Flask(__name__)
@@ -101,7 +101,7 @@ def detect_cv2_camera(cfgfile, weightfile):
     if use_cuda:
         m.cuda()
 
-    #cap = cv2.VideoCapture(0)
+    # cap = cv2.VideoCapture(0)
     cap = cv2.VideoCapture("./output.mp4")
     cap.set(3, 1280)
     cap.set(4, 720)
@@ -119,9 +119,9 @@ def detect_cv2_camera(cfgfile, weightfile):
         sized = cv2.resize(img, (m.width, m.height))
         sized = cv2.cvtColor(sized, cv2.COLOR_BGR2RGB)
 
-        #start = time.time()
+        # start = time.time()
         boxes = do_detect(m, sized, 0.4, 0.6, use_cuda)
-        #finish = time.time()
+        # finish = time.time()
 
         result_img = plot_boxes_cv2(
             img, boxes[0], savename=None, class_names=class_names)
@@ -185,6 +185,94 @@ def get_args():
     args = parser.parse_args()
 
     return args
+
+
+@app.route('/')
+def index():
+    return render_template('index.html')
+
+
+@app.route('/accept/<number>')
+def accept(number):
+    conn = sqlite3.connect('database.db')
+    cur = conn.cursor()
+    cur.execute("SELECT * FROM pass_application WHERE plate_no=?", (number,))
+    rows = cur.fetchall()
+    data = rows[0]
+    conn.execute(
+        "INSERT INTO pass_allowed VALUES(?,?,?,?,?,?,?,?,?)", data)
+    conn.execute("DELETE FROM pass_application WHERE plate_no=?", (number,))
+    conn.commit()
+    conn.close()
+    return redirect('/pass_application')
+
+
+@ app.route('/reject/<number>')
+def reject(number):
+    conn = sqlite3.connect('database.db')
+    conn.execute("DELETE FROM pass_application WHERE plate_no=?", (number,))
+    conn.commit()
+    conn.close()
+    return redirect('/pass_application')
+
+
+@ app.route('/pass_application')
+def pass_application():
+    conn = sqlite3.connect('database.db')
+    cur = conn.cursor()
+    cur.execute("SELECT * FROM pass_application")
+    rows = cur.fetchall()
+    conn.close()
+    if len(rows) == 0:
+        flag = True
+    else:
+        flag = False
+    return render_template('show-applications.html', rows=rows, flag=flag)
+
+
+@app.route('/application_problem')
+def application_problem():
+    conn = sqlite3.connect('database.db')
+    cur = conn.cursor()
+
+    cur.execute("SELECT * FROM plate_numbers")
+    rows = cur.fetchall()
+    problems = []
+    for row in rows:
+        cur.execute(
+            "SELECT * FROM pass_allowed WHERE plate_no=?", (row[0],))
+        rows1 = cur.fetchall()
+        if len(rows1) == 0:
+            problems.append(row[0])
+    conn.commit()
+    conn.close()
+    if len(problems) == 0:
+        flag = False
+    else:
+        flag = True
+    return render_template('application_problem.html', problems=problems, flag=flag)
+
+
+@ app.route('/store_info', methods=["POST"])
+def store_info():
+    req = request.form
+    firstname = req.get("inputFirstName4")
+    lastname = req.get("inputLastName4")
+    email = req.get("inputEmail4")
+    plate_no = req.get("inputPlateNo")
+    address1 = req.get("address1")
+    address2 = req.get("address2")
+    inputCity = req.get("inputCity")
+    inputState = req.get("inputState")
+    inputZip = req.get("inputZip")
+    values = (firstname, lastname, email, plate_no, address1,
+              address2, inputCity, inputState, inputZip)
+    conn = sqlite3.connect('database.db')
+    conn.execute(
+        "INSERT INTO pass_application VALUES(?,?,?,?,?,?,?,?,?)", values)
+    conn.commit()
+    conn.close()
+    return redirect('/')
 
 
 if __name__ == '__main__':

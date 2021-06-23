@@ -1,0 +1,79 @@
+body {
+  margin: 0;
+}
+
+.navbar {
+  margin: 0 10%;
+  padding: 1rem;
+}
+
+.pass-form {
+  margin: 5% auto;
+  width: 60%;
+  padding: 20px;
+  border: 1px solid #d4d4d6;
+  border-radius: 1%;
+}
+
+#heading {
+  text-align: center;
+  margin-top: 5%;
+  margin-bottom: 0;
+}
+
+body {
+  margin: 0;
+}
+
+.navbar {
+  margin: 0 10%;
+  padding: 1rem;
+}
+
+.pass-form {
+  margin: 5% auto;
+  width: 60%;
+  padding: 20px;
+  border: 1px solid #d4d4d6;
+  border-radius: 1%;
+}
+
+#heading {
+  text-align: center;
+  margin-top: 5%;
+  margin-bottom: 0;
+}
+
+.accept .btn,
+.reject .btn {
+  margin: 0;
+  width: 100%;
+}
+div.accept.card-body,
+div.reject.card-body {
+  margin: auto;
+  padding: 0;
+}
+
+.value-t{
+  background-color: ghostwhite;
+  text-align: center;
+  margin: 10px;
+  padding:2px;
+  font-size: 1.2em;
+  color:purple;
+}
+
+.no-pass{
+    color:darkgray;
+    margin-top:15%;
+    margin-left: 40%;
+}
+
+.card-text {
+  margin-bottom: 0;
+}
+
+span {
+  margin-right: 1rem;
+}
