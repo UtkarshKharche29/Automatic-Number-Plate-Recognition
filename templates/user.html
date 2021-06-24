@@ -34,29 +34,28 @@
           <!-- <a class="navbar-brand" href="#">XYZ</a> -->
           <ul class="navbar-nav me-auto mb-2 mb-lg-0">
             <li class="nav-item">
-              <a class="nav-link active" aria-current="page" href={{url_for('index')}}
-                >Home</a
+              <a class="nav-link active" aria-current="page" href={{url_for('user')}}
+                >E-pass application</a
               >
             </li>
             <li class="nav-item">
-              <a class="nav-link" href={{url_for('pass_application')}}
-                >Pass Applications</a
+              <a class="nav-link" href={{url_for('application_status')}}
+                >Application Status</a
               >
             </li>
             <li class="nav-item">
-              <a class="nav-link" href={{url_for('application_problem')}}
-                >Vehicle with no pass</a
-              >
-            </li>
-            <li class="nav-item">
-              <a class="nav-link" href={{url_for('showpass')}}
-                >Issued Passes</a
+              <a class="nav-link" href={{url_for('login')}}
+                >Log Out</a
               >
             </li>
           </ul>
         </div>
       </div>
     </nav>
+
+    <br>
+    <h3 style="text-align: center;">Welcome to the User Page</h3>
+    <br>
 
     <h1 id="heading">Apply for Pass</h1>
     <form action="/store_info" method="post" class="pass-form row g-3">
