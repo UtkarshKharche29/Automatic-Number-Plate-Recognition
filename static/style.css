@@ -7,25 +7,6 @@ body {
   padding: 1rem;
 }
 
-.no-pass{
-  text-align: center;
-  margin-top: 15%;
-  color:gray;
-}
-
-.showpass-info{
-  padding-left: 450px;
-  background-color: ghostwhite;
-}
-
-.value-t{
-  background-color: ghostwhite;
-  padding:3px;
-  margin: 5px;
-  text-align: center;
-  font-size: 1.2em;
-}
-
 .pass-form {
   margin: 5% auto;
   width: 75%;
@@ -36,13 +17,14 @@ body {
 
 #heading {
   text-align: center;
-  margin-top: 5%;
+  margin-top: 3%;
   margin-bottom: 0;
 }
 
 .application {
   padding: 0 10%;
   margin: 0.5rem 0;
+  background-color: #ecf0f1;
 }
 
 .accept .btn,
@@ -89,4 +71,14 @@ span {
 
 .error-page {
   margin-top: 5%;
+}
+
+.current-balance {
+  color: white;
+}
+
+.current-balance {
+  position: absolute;
+  right: 23%;
+  top: 1.5rem;
 }

@@ -43,10 +43,8 @@
                 >Application Status</a
               >
             </li>
-            <li class="nav-item">
-              <a class="nav-link" href={{url_for('login')}}
-                >Log Out</a
-              >
+            <li class="nav-item ml-auto current-balance">
+              Current Balance: &#8377 0
             </li>
           </ul>
         </div>
@@ -54,10 +52,10 @@
     </nav>
 
     <br>
-    <h3 style="text-align: center;">Welcome to the User Page</h3>
-    <br>
+    <h5 style="text-align: center;">Welcome to the User Home Page!</h5>
+    
 
-    <h1 id="heading">Apply for Pass</h1>
+    <h1 id="heading">Apply for E-Pass</h1>
     <form action="/store_info" method="post" class="pass-form row g-3">
       <div class="col-md-6">
         <label for="inputFirstName4" class="form-label">First Name</label>
