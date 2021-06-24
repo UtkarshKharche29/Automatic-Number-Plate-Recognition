@@ -12,7 +12,8 @@
       integrity="sha384-+0n0xVW2eSR5OomGNYDnhzAbDsOXxcvSN1TPprVMTNDbiYZCxYbOOl7+AMvyTG2x"
       crossorigin="anonymous"
     />
-    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='style.css') }}" />
+    <!-- <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='style.css') }}" /> -->
+    <link rel="stylesheet" href="../static/style.css">
   </head>
   <body>
     <div class="container-fluid">
@@ -57,13 +58,49 @@
               </div>
             </div>
           </nav>
-          {% if flag == True %}
+          <!-- {% if flag == True %}
           {% for t in problems %}
           <div class="value-t">{{t[0][0]}} &ensp; &ensp;{{t[0][1]}}</div>
           {% endfor %}
           {% else %}
           <h2 class="no-pass">No problem yet</h2>
-          {% endif %}
+          {% endif %} -->
+          <div class="container">
+            <div class="row value-t-row">
+              <div class="col">
+                <div class="value-t">Plate Number</div>
+              </div>
+              <div class="col">
+                <div class="value-t">Time Stamp</div>
+              </div>
+            </div>
+            <div class="row value-t-row">
+              <div class="col">
+                <div class="value-t">JH239JD3KXG1</div>
+              </div>
+              <div class="col">
+                <div class="value-t">Thu Jun 24 14:40:35 2021</div>
+              </div>
+            </div>
+            <div class="row value-t-row">
+              <div class="col">
+                <div class="value-t">JH239JD3KXG1</div>
+              </div>
+              <div class="col">
+                <div class="value-t">Thu Jun 24 14:40:35 2021</div>
+              </div>
+            </div>
+            <div class="row value-t-row">
+              <div class="col">
+                <div class="value-t">JH239JD3KXG1</div>
+              </div>
+              <div class="col">
+                <div class="value-t">Thu Jun 24 14:40:35 2021</div>
+              </div>
+            </div>
+          </div>
+          
+          
 
 </div>
     <!-- Bootstrap JS CDNs -->

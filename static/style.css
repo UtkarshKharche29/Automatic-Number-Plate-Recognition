@@ -82,3 +82,11 @@ span {
   right: 23%;
   top: 1.5rem;
 }
+
+.value-t-row {
+  margin-bottom: 0.3rem;
+  text-align: center;
+  padding: 1rem;
+  border-bottom: 1px solid#d4d4d6;
+  background-color: #ecf0f1;
+}
