@@ -58,7 +58,7 @@
           </nav>
           {% if flag == True %}
           {% for t in problems %}
-          <div class="value-t">{{t}}</div>
+          <div class="value-t">{{t[0][0]}},{{t[0][1]}}</div>
           {% endfor %}
           {% else %}
           <h2 class="no-pass">No problem yet</h2>

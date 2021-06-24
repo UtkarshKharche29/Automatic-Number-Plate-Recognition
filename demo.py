@@ -187,7 +187,7 @@ def get_args():
     return args
 
 
-@app.route('/')
+@app.route('/index')
 def index():
     return render_template('index.html')
 
@@ -230,7 +230,7 @@ def pass_application():
     return render_template('show-applications.html', rows=rows, flag=flag)
 
 
-@ app.route('/showpass')
+@app.route('/showpass')
 def showpass():
     conn = sqlite3.connect('database.db')
     cur = conn.cursor()
@@ -242,6 +242,31 @@ def showpass():
     else:
         flag = False
     return render_template('showpass.html', rows=rows, flag=flag)
+
+
+@app.route('/')
+def main():
+    return render_template('login.html')
+
+
+@app.route('/login', methods=["POST"])
+def login():
+    req = request.form
+    username = req.get("name")
+    password = req.get("password")
+    conn = sqlite3.connect('database.db')
+    cur = conn.cursor()
+    cur.execute("SELECT * FROM users WHERE username=(?)", (username,))
+    rows = cur.fetchone()
+    if len(rows) == 0:
+        return render_template('error.html')
+    if password == rows[1]:
+        if username == 'admin':
+            return redirect("/index")
+        else:
+            return redirect("/index")
+    else:
+        return render_template('error.html')
 
 
 @app.route('/application_problem')
@@ -257,7 +282,10 @@ def application_problem():
             "SELECT * FROM pass_allowed WHERE plate_no=?", (row[0],))
         rows1 = cur.fetchall()
         if len(rows1) == 0:
-            problems.append(row[0])
+            cur.execute(
+                "SELECT * FROM plate_numbers WHERE plate_no=?", (row[0],))
+            rows2 = cur.fetchall()
+            problems.append(rows2)
     conn.commit()
     conn.close()
     if len(problems) == 0:
@@ -307,7 +335,8 @@ if __name__ == '__main__':
         line_count = 0
         for row in csv_reader:
             t = "".join(re.findall('[0-9A-Za-z]+', row[2]))
-            conn.execute("INSERT INTO plate_numbers VALUES(?)", (t,))
+            t1 = row[1]
+            conn.execute("INSERT INTO plate_numbers VALUES(?,?)", (t, t1))
         conn.commit()
         conn.close()
     app.run()
