@@ -44,3 +44,27 @@ div.reject {
 span {
   margin-right: 1.5rem;
 }
+
+.value-t{
+  background-color: ghostwhite;
+  padding: 2px;
+  margin: 5px;
+  text-align: center;
+  font-size: 1.2em;
+  color:purple;
+}
+
+.no-pass{
+  margin-left: 35%;
+  margin-top:20%;
+  color:darkgray;
+  font-family: sans-serif;
+}
+
+.showpass-info{
+  padding-left:470px;
+}
+
+.row{
+  background-color: ghostwhite
+}

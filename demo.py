@@ -230,6 +230,20 @@ def pass_application():
     return render_template('show-applications.html', rows=rows, flag=flag)
 
 
+@ app.route('/showpass')
+def showpass():
+    conn = sqlite3.connect('database.db')
+    cur = conn.cursor()
+    cur.execute("SELECT * FROM pass_allowed")
+    rows = cur.fetchall()
+    conn.close()
+    if len(rows) == 0:
+        flag = True
+    else:
+        flag = False
+    return render_template('showpass.html', rows=rows, flag=flag)
+
+
 @app.route('/application_problem')
 def application_problem():
     conn = sqlite3.connect('database.db')
