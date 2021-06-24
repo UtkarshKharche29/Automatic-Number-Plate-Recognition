@@ -45,26 +45,29 @@ span {
   margin-right: 1.5rem;
 }
 
-.value-t{
-  background-color: ghostwhite;
-  padding: 2px;
-  margin: 5px;
+.login-form {
+  width: 20rem;
+  margin: 3% auto;
+}
+
+.title {
   text-align: center;
-  font-size: 1.2em;
-  color:purple;
+  margin-top: 10%;
+  color: #d4d4d6;
 }
 
-.no-pass{
-  margin-left: 35%;
-  margin-top:20%;
-  color:darkgray;
-  font-family: sans-serif;
+.login-btn {
+  color: #d4d4d6;
 }
 
-.showpass-info{
-  padding-left:470px;
+.login-btn:hover {
+  color: #d4d4d6;
 }
 
-.row{
-  background-color: ghostwhite
+.form-group {
+  margin: 1rem 0;
+}
+
+.error-page {
+  margin-top: 5%;
 }
