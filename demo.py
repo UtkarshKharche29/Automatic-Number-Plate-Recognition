@@ -187,9 +187,9 @@ def get_args():
     return args
 
 
-@app.route('/index')
-def index():
-    return render_template('index.html')
+@app.route('/user')
+def user():
+    return render_template('user.html')
 
 
 @app.route('/accept/<number>')
@@ -222,12 +222,13 @@ def pass_application():
     cur = conn.cursor()
     cur.execute("SELECT * FROM pass_application")
     rows = cur.fetchall()
+    print(rows)
     conn.close()
     if len(rows) == 0:
         flag = True
     else:
         flag = False
-    return render_template('show-applications.html', rows=rows, flag=flag)
+    return render_template('admin.html', rows=rows, flag=flag)
 
 
 @app.route('/showpass')
@@ -249,6 +250,21 @@ def main():
     return render_template('login.html')
 
 
+@app.route('/admin')
+def admin():
+    conn = sqlite3.connect('database.db')
+    cur = conn.cursor()
+    cur.execute("SELECT * FROM pass_application")
+    rows = cur.fetchall()
+    print(rows)
+    conn.close()
+    if len(rows) == 0:
+        flag = True
+    else:
+        flag = False
+    return render_template('admin.html', rows=rows, flag=flag)
+
+
 @app.route('/login', methods=["POST"])
 def login():
     req = request.form
@@ -262,11 +278,16 @@ def login():
         return render_template('error.html')
     if password == rows[1]:
         if username == 'admin':
-            return redirect("/index")
+            return redirect("/admin")
         else:
-            return redirect("/index")
+            return redirect("/user")
     else:
         return render_template('error.html')
+
+
+@app.route('/application_status')
+def application_status():
+    return render_template('application_status.html')
 
 
 @app.route('/application_problem')
@@ -288,6 +309,7 @@ def application_problem():
             problems.append(rows2)
     conn.commit()
     conn.close()
+    print(problems)
     if len(problems) == 0:
         flag = False
     else:
@@ -314,7 +336,7 @@ def store_info():
         "INSERT INTO pass_application VALUES(?,?,?,?,?,?,?,?,?)", values)
     conn.commit()
     conn.close()
-    return redirect('/')
+    return redirect('/index')
 
 
 if __name__ == '__main__':

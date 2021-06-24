@@ -7,6 +7,25 @@ body {
   padding: 1rem;
 }
 
+.no-pass{
+  text-align: center;
+  margin-top: 15%;
+  color:gray;
+}
+
+.showpass-info{
+  padding-left: 450px;
+  background-color: ghostwhite;
+}
+
+.value-t{
+  background-color: ghostwhite;
+  padding:3px;
+  margin: 5px;
+  text-align: center;
+  font-size: 1.2em;
+}
+
 .pass-form {
   margin: 5% auto;
   width: 75%;
