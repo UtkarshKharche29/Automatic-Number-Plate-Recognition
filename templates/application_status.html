@@ -9,6 +9,7 @@
     <title>USER PAGE</title>
 </head>
 <body>
+  <div class="container-fluid">
   <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
     <div class="container-fluid">
       <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#collapsibleNavbar">
@@ -27,36 +28,41 @@
               >Application Status</a
             >
           </li>
-          <li class="nav-item ml-auto current-balance">
+          <!-- <li class="nav-item ml-auto current-balance">
             Current Balance: &#8377 0
-          </li>
+          </li> -->
         </ul>
           </div>
       </div>
     </nav>
 
-    
+    {% if flag == False %}
+    {% for row in rows %}
        <div class="card application container-fluid">
         <div class="row">
           <div class="col-8">
             <div class="card-body">
-              <h6 class="name card-title">AMAN SINGH</h6>
-              <p class="email card-text">aa@gmail.com</p>
-              <p class="num card-text">9934685137</p>
-              <p class="address card-text">aaaa</p>
-              <p class="vehicle no card-text">MH13K9534</p>
+              <h6 class="name card-title">{{row[0]}} {{row[1]}}</h6>
+              <p class="email card-text">{{row[2]}}</p>
+              <p class="address card-text">{{row[4]}},{{row[5]}}<br />
+                {{row[6]}},{{row[7]}},{{row[8]}}
+              </p>
+              <p class="vehicle no card-text">{{row[3]}}</p>
             </div>
           </div>
           <div class="col-4">
             <div class="card-body">
               Status:
               <div style="color: green">Accepted</div>
-              or
-              <div style="color: red">Rejected</div>
             </div>
           </div>
         </div>
     </div>
+    {% endfor %}
+    {% else %}
+    <h2>No Allowed Pass</h2>
+    {% endif %}
+  </div>
   </body>
 </html>
   

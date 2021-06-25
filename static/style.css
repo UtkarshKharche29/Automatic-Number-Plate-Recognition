@@ -7,12 +7,23 @@ body {
   padding: 1rem;
 }
 
+.showpass-info{
+  padding-left: 400px;
+  background-color: ghostwhite;
+}
+
 .pass-form {
   margin: 5% auto;
   width: 75%;
   padding: 20px;
   border: 1px solid #d4d4d6;
   border-radius: 1%;
+}
+
+.no-pass{
+  text-align: center;
+  margin-top: 15%;
+  color:darkgray;
 }
 
 #heading {

@@ -10,10 +10,15 @@ from stage2.segment import *
 from PIL import Image
 import pytesseract
 import os
-from flask import Flask, render_template, request, redirect
+from flask import Flask, render_template, request, redirect, session
 import sqlite3
 import csv
+# from flask_session import Session
 app = Flask(__name__)
+app.secret_key = "hello flask app"
+# app.config["SESSION_PERMANENT"] = False
+# app.config["SESSION_TYPE"] = "filesystem"
+# Session(app)
 
 """hyper parameters"""
 if torch.cuda.is_available():
@@ -277,6 +282,7 @@ def login():
     if len(rows) == 0:
         return render_template('error.html')
     if password == rows[1]:
+        session["username"] = username
         if username == 'admin':
             return redirect("/admin")
         else:
@@ -287,7 +293,16 @@ def login():
 
 @app.route('/application_status')
 def application_status():
-    return render_template('application_status.html')
+    username = session.get("username")
+    conn = sqlite3.connect('database.db')
+    cur = conn.cursor()
+    cur.execute("SELECT * FROM pass_allowed WHERE first_name=(?)", (username,))
+    rows = cur.fetchall()
+    if len(rows) == 0:
+        flag = True
+    else:
+        flag = False
+    return render_template('application_status.html', rows=rows, flag=flag)
 
 
 @app.route('/application_problem')
@@ -336,7 +351,7 @@ def store_info():
         "INSERT INTO pass_application VALUES(?,?,?,?,?,?,?,?,?)", values)
     conn.commit()
     conn.close()
-    return redirect('/index')
+    return redirect('/user')
 
 
 if __name__ == '__main__':
